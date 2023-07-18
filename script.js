@@ -6,17 +6,16 @@ const urls = [
 
 async function fetchData() {
     try {
-        const fetchedURLs = Promise.all ([
+        const [fetched1, fetched2, fetched3] = await Promise.all ([
             fetch(urls[0]),
             fetch(urls[1]),
             fetch(urls[2])
         ]);
-
-        const [fetched1, fetched2, fetched3] = await fetchedURLs;
-    
-    const data1 = await fetched1?.json();
-    const data2 = await fetched2?.json();
-    const data3 = await fetched3?.json();
+    const [data1, data2, data3] = await Promise.all([
+        fetched1?.json(),
+        fetched2?.json(),
+        fetched3?.json(),
+    ]);
 
     return { data1, data2, data3 }
     } catch (err) {
@@ -26,7 +25,6 @@ async function fetchData() {
 
 
 async function insertToPage () {
-    try {
     const { data1, data2, data3 } = await fetchData();
     
         const cardImg1 = document.getElementById("img1");
@@ -40,11 +38,8 @@ async function insertToPage () {
         const cardImg3 = document.getElementById("img3");
         cardImg3.setAttribute("src", data3.message);
         console.log(cardImg3)
-    } catch (err) {
-        alert("Sorry, a problem has occured. Check your internet connection and try to reload the page.")
-    }
 }
 
 
-insertToPage()
+insertToPage();
 
